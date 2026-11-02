@@ -5,15 +5,26 @@
       <Configuration>Debug</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="release|x64">
+      <Configuration>release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B66291A2-860D-4FFE-9D67-CFF759602A3F}</ProjectGuid>
     <Keyword>QtVS_v304</Keyword>
     <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)'=='release|x64'">10.0</WindowsTargetPlatformVersion>
     <QtMsBuild Condition="'$(QtMsBuild)'=='' OR !Exists('$(QtMsBuild)\qt.targets')">$(MSBuildProjectDirectory)\QtMsBuild</QtMsBuild>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <PlatformToolset>v143</PlatformToolset>
     <UseDebugLibraries>true</UseDebugLibraries>
@@ -24,8 +35,13 @@
     <Import Project="$(QtMsBuild)\qt_defaults.props" />
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
-    <QtInstall>6.10.1_msvc2022_64</QtInstall>
-    <QtModules>core;gui;widgets</QtModules>
+    <QtInstall>6.11.1_msvc2022_64</QtInstall>
+    <QtModules>core;gui;widgets;sql</QtModules>
+    <QtBuildConfig>debug</QtBuildConfig>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='release|x64'" Label="QtSettings">
+    <QtInstall>6.11.1_msvc2022_64</QtInstall>
+    <QtModules>core;gui;widgets;sql</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
@@ -37,13 +53,38 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(QtMsBuild)\Qt.props" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(QtMsBuild)\Qt.props" />
+  </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <IncludePath>C:\Qt\6.11.1\msvc2022_64\include;C:\Qt\6.11.1\msvc2022_64\include\QtSql;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Qt\6.11.1\msvc2022_64\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='release|x64'">
+    <IncludePath>C:\Qt\6.11.1\msvc2022_64\include;C:\Qt\6.11.1\msvc2022_64\include\QtSql;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Qt\6.11.1\msvc2022_64\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>C:\Qt\6.11.1\msvc2022_64\include;C:\Qt\6.11.1\msvc2022_64\include\QtCore;C:\Qt\6.11.1\msvc2022_64\include\QtGui;C:\Qt\6.11.1\msvc2022_64\include\QtWidgets;C:\Qt\6.11.1\msvc2022_64\include\QtSql</AdditionalIncludeDirectories>
     </ClCompile>
+    <Link>
+      <AdditionalDependencies>Qt6Sqld.lib;Qt6Cored.lib;Qt6Widgetsd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Qt\6.11.1\msvc2022_64\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='release|x64'">
+    <ClCompile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>C:\Qt\6.11.1\msvc2022_64\include;C:\Qt\6.11.1\msvc2022_64\include\QtCore;C:\Qt\6.11.1\msvc2022_64\include\QtGui;C:\Qt\6.11.1\msvc2022_64\include\QtWidgets;C:\Qt\6.11.1\msvc2022_64\include\QtSql</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>Qt6Sqld.lib;Qt6Cored.lib;Qt6Widgetsd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Qt\6.11.1\msvc2022_64\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
     <ClCompile>
@@ -57,12 +98,28 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='release|x64'" Label="Configuration">
+    <ClCompile>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ScheduleDataAccessObject.cpp" />
+    <ClCompile Include="scheduleManager.cpp" />
+    <ClCompile Include="UsageDataAccessObject.cpp" />
     <QtRcc Include="TimerApp.qrc" />
     <QtUic Include="TimerApp.ui" />
     <QtMoc Include="TimerApp.h" />
     <ClCompile Include="ActiveWindowHelper.cpp" />
     <ClCompile Include="Calendar.cpp" />
+    <ClCompile Include="DBConenection.cpp" />
     <ClCompile Include="TimerLogic.cpp" />
     <ClCompile Include="TimerApp.cpp" />
     <ClCompile Include="main.cpp" />
@@ -70,16 +127,25 @@
       <SubType>
       </SubType>
     </None>
-    <None Include="TimerApp.ico" />
-    <ResourceCompile Include="TimerApp.rc" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="TimerLogic.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ActiveWindowHelper.h" />
+    <ClInclude Include="DbConnection.h" />
     <ClInclude Include="KeyHelper.h" />
+    <ClInclude Include="resource1.h" />
+    <ClInclude Include="ScheduleDataAccessObject.h" />
+    <ClInclude Include="scheduleManager.h" />
+    <ClInclude Include="UsageDataAccessObject.h" />
     <QtMoc Include="Calendar.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="wtch.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

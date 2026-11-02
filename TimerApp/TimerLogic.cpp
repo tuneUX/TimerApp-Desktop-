@@ -1,68 +1,152 @@
 #include "TimerLogic.h"
+#include "UsageDataAccessObject.h"
 
-TimerLogic::TimerLogic(QObject* parent) : QObject(parent) {
-    connect(&tickTimer, &QTimer::timeout, this, &TimerLogic::tick);
+#include <QDateTime>
+#include <QDebug>
+#include <algorithm>
+
+TimerLogic::TimerLogic(QSqlDatabase& db, QObject* parent)
+    : QObject(parent), dataBase(db)
+{
+    connect(&tickTimer, &QTimer::timeout,
+        this, &TimerLogic::tick);
 }
 
-void TimerLogic::start(int durationSec) {
+void TimerLogic::start(int durationSec)
+{
+    startInternal(durationSec, false);
+}
+
+void TimerLogic::startScheduled(int remainingSec)
+{
+    startInternal(remainingSec, true);
+}
+
+void TimerLogic::startInternal(int durationSec, bool scheduled)
+{
+    if (durationSec <= 0)
+        return;
+
+    tickTimer.stop();
+
     duration = durationSec;
-    endTime = std::chrono::steady_clock::now() + std::chrono::seconds(durationSec);
-    tickTimer.start(1000); // tick every second
-    running = true;
+    allowedSeconds = durationSec;
+    elapsedSeconds = 0;
     pauseRemaining = durationSec;
+    scheduledMode = scheduled;
+    finishedEmitted = false;
+
+    endTime = std::chrono::steady_clock::now()
+        + std::chrono::seconds(durationSec);
+
+    running = true;
+    tickTimer.start(1000);
+
+    emit remainingChanged(durationSec);
 }
 
-void TimerLogic::stop() {
+bool TimerLogic::isRunning() const
+{
+    return running;
+}
+
+bool TimerLogic::isScheduled() const
+{
+    return scheduledMode;
+}
+
+void TimerLogic::stop()
+{
     tickTimer.stop();
     running = false;
     pauseRemaining = 0;
+    elapsedSeconds = 0;
+    finishedEmitted = false;
+
     emit remainingChanged(0);
 }
 
-void TimerLogic::pause() {
-    if (!running) return;
+void TimerLogic::pause()
+{
+    if (!running)
+        return;
+
+    pauseRemaining = std::max(0, getRemaining());
+
     tickTimer.stop();
     running = false;
-    pauseRemaining = std::chrono::duration_cast<std::chrono::seconds>(
-        endTime - std::chrono::steady_clock::now()).count();
 
-    emit remainingChanged(pauseRemaining);  // freeze UI at current number
+    emit remainingChanged(pauseRemaining);
     emit paused();
 }
 
-void TimerLogic::resume() {
-    if (!running && pauseRemaining > 0) {
-        endTime = std::chrono::steady_clock::now() + std::chrono::seconds(pauseRemaining);
-        tickTimer.start(1000);
-        running = true;
-    }
+void TimerLogic::resume()
+{
+    if (running || pauseRemaining <= 0)
+        return;
+
+    endTime = std::chrono::steady_clock::now()
+        + std::chrono::seconds(pauseRemaining);
+
+    running = true;
+    tickTimer.start(1000);
 }
 
-void TimerLogic::tick() {
-    if (!running) return;
-    auto remaining = std::chrono::duration_cast<std::chrono::seconds>(
-        endTime - std::chrono::steady_clock::now()).count();
-
-    if (remaining > 0) {
-        pauseRemaining = static_cast<int>(remaining);
-        emit remainingChanged(pauseRemaining);
-    }
-    else {
-        tickTimer.stop();
-        running = false;
-        emit remainingChanged(0);
-        emit finished();
-    }
-}
-
-int TimerLogic::getRemaining() const {
+int TimerLogic::getRemaining() const
+{
     if (running) {
-        return std::chrono::duration_cast<std::chrono::seconds>(
-            endTime - std::chrono::steady_clock::now()).count();
+        return std::max(0, static_cast<int>(
+            std::chrono::duration_cast<std::chrono::seconds>(
+                endTime - std::chrono::steady_clock::now()).count()));
     }
+
     return pauseRemaining;
 }
 
-int TimerLogic::getDuration() const {
-    return duration;
+int TimerLogic::getOveruseMinutes() const
+{
+    const int overuseSeconds =
+        std::max(0, elapsedSeconds - allowedSeconds);
+
+    return overuseSeconds / 60;
+}
+
+void TimerLogic::tick()
+{
+    if (!running)
+        return;
+
+    const auto now = std::chrono::steady_clock::now();
+
+    int remaining = static_cast<int>(
+        std::chrono::duration_cast<std::chrono::seconds>(
+            endTime - now).count());
+
+    if (remaining > 0) {
+        pauseRemaining = remaining;
+        elapsedSeconds = duration - remaining;
+        emit remainingChanged(remaining);
+        return;
+    }
+
+    // Countdown reached zero.
+    elapsedSeconds = duration;
+    pauseRemaining = 0;
+    emit remainingChanged(0);
+
+    if (!finishedEmitted) {
+        finishedEmitted = true;
+        emit finished();
+    }
+
+    // Continue counting overuse after the allowed time.
+    const int overuseSeconds = static_cast<int>(
+        std::chrono::duration_cast<std::chrono::seconds>(
+            now - endTime).count());
+
+    elapsedSeconds = duration + std::max(0, overuseSeconds);
+
+    if (overuseSeconds > 0) {
+        emit remainingChanged(-overuseSeconds);
+    }
 }

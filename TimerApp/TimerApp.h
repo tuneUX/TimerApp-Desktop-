@@ -12,13 +12,19 @@
 #include <unordered_map>
 #include <QListWidget>
 #include<QCalendarWidget>
+#include<QSqlDatabase>
+#include"UsageDataAccessObject.h"
+#include "ScheduleManager.h"
+#include "ScheduleDataAccessObject.h"
+#include <QSystemTrayIcon>
+#include <QDate>
 
 class TimerApp : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit TimerApp(QWidget* parent = nullptr);
+    explicit TimerApp(QSqlDatabase& db,QWidget* parent = nullptr);
     
 
 private slots:
@@ -29,6 +35,10 @@ private slots:
     void CheckActiveWindow();
     void onTrackAppClicked();
     void updateRemaining(int seconds);
+    void onScheduleClicked();
+
+
+    
 
 
 private:
@@ -39,18 +49,31 @@ private:
     QPushButton* stopButton;
     QPushButton* togglePause;
     QPushButton* trackButton;
+    QPushButton* scheduleButton;
+    QSystemTrayIcon* trayIcon = nullptr;
+
     QLabel* statusLabel;
     QLabel* timerDisplay;
     QLineEdit* secondsInput;
     QListWidget* openedApps;
     QListWidget* onTimerApps;
     std::unordered_map<QString, TimerLogic*> appTimers;
-    //calendar
-    QCalendarWidget* calendar;
-    void markSpecialDays(int year, int month);
+    ScheduleManager schedule;
     
 
+    //overuse
+    void showUsageData();
+    QListWidget* usageList;
+    //calendar
+    QCalendarWidget* calendar;
+    
+    QSqlDatabase& dataBase;
 
+    QDate lastCheckedDate;
+    
+
+    void markScheduledDays(int year, int month);
+    void showScheduleForDate(const QDate& date);
 
    
 };

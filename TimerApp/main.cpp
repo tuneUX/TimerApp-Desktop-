@@ -1,18 +1,32 @@
+#include <QApplication>
+#include <QSqlDatabase>
+#include <QDebug>
+#include <QSqlError>
 #include "TimerApp.h"
-#include <QtWidgets/QApplication>
+#include "UsageDataAccessObject.h"
+#include "ScheduleDataAccessObject.h"
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char* argv[]) {
     QApplication app(argc, argv);
 
-    app.setStyleSheet(
-    "QPushButton{background color:#3498db;color:Add8e6;border-radius:6px;padding:6px}"
-    "QpushButton:hover{background-color:2980b9;}"
-    "QLabel { font-size: 16px; color: #2ecc71; }"
+    qDebug() << "Available drivers:" << QSqlDatabase::drivers();
+    qDebug() << "Plugin paths:" << QCoreApplication::libraryPaths();
 
+    // Open one SQLite database file
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName("timerapp.db");   // persistent file
+    if (!db.open()) {
+        qDebug() << "DB open error:" << db.lastError().text();
+        return -1;
+    }
 
-    );
-    TimerApp window;
+    // Create both tables once
+    UsageDataAccessObject::createTable(db);
+    ScheduleDataAccessObject::createTable(db);
+
+    // Pass the single DB into TimerApp
+    TimerApp window(db);
     window.show();
+
     return app.exec();
 }

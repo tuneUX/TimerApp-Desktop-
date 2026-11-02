@@ -1,0 +1,23 @@
+﻿   Qt/MSBuild: 3.5.0.0
+  Reading Qt configuration (C:/Qt/6.11.1/msvc2022_64/bin/qmake)
+   Qt: 6.11.1
+  uic TimerApp.ui
+  rcc TimerApp.qrc
+  moc TimerApp.h
+  moc TimerLogic.h
+  moc Calendar.h
+   RCC: Warning: No resources in 'C:\Users\Facmd.FACM\source\repos\TimerApp\TimerApp\TimerApp.qrc'.
+  ScheduleDataAccessObject.cpp
+  scheduleManager.cpp
+  UsageDataAccessObject.cpp
+  ActiveWindowHelper.cpp
+  Calendar.cpp
+  DBConenection.cpp
+  TimerLogic.cpp
+  TimerApp.cpp
+  main.cpp
+  qrc_TimerApp.cpp
+  moc_TimerApp.cpp
+  moc_TimerLogic.cpp
+  moc_Calendar.cpp
+  TimerApp.vcxproj -> C:\Users\Facmd.FACM\source\repos\TimerApp\x64\release\TimerApp.exe
