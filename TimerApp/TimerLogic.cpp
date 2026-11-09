@@ -63,7 +63,7 @@ void TimerLogic::stop()
     elapsedSeconds = 0;
     finishedEmitted = false;
 
-    emit remainingChanged(0);
+    emit stopped();
 }
 
 void TimerLogic::pause()
@@ -110,7 +110,7 @@ int TimerLogic::getOveruseMinutes() const
 
     return overuseSeconds / 60;
 }
-
+// tick every second function
 void TimerLogic::tick()
 {
     if (!running)

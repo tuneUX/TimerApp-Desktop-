@@ -1,34 +1,26 @@
 #pragma once
 
 #include <QtWidgets/QMainWindow>
-#include "ui_TimerApp.h"
-#include <QPushButton>
-#include <QLabel>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include "TimerLogic.h"
-#include <QLineEdit>
-#include <QFileInfo>
-#include <unordered_map>
-#include <QListWidget>
-#include<QCalendarWidget>
-#include<QSqlDatabase>
-#include"UsageDataAccessObject.h"
-#include "ScheduleManager.h"
-#include "ScheduleDataAccessObject.h"
+#include <QSqlDatabase>
 #include <QSystemTrayIcon>
 #include <QDate>
+#include <unordered_map>
+#include<QApplication>
+
+#include "TimerLogic.h"
+#include "UsageDataAccessObject.h"
+#include "ScheduleManager.h"
+#include "ScheduleDataAccessObject.h"
+#include "UI.h"
 
 class TimerApp : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit TimerApp(QSqlDatabase& db,QWidget* parent = nullptr);
-    
+    explicit TimerApp(QSqlDatabase& db, QWidget* parent = nullptr);
 
 private slots:
-    
     void onStartClicked();
     void onStopClicked();
     void onTogglePauseClicked();
@@ -37,43 +29,25 @@ private slots:
     void updateRemaining(int seconds);
     void onScheduleClicked();
 
-
-    
-
-
 private:
     QString timeFormat(int seconds);
-    QWidget* central;
-    QVBoxLayout* layout;
-    QPushButton* startButton;
-    QPushButton* stopButton;
-    QPushButton* togglePause;
-    QPushButton* trackButton;
-    QPushButton* scheduleButton;
+
+    // UI
+    UI* ui = nullptr;
     QSystemTrayIcon* trayIcon = nullptr;
 
-    QLabel* statusLabel;
-    QLabel* timerDisplay;
-    QLineEdit* secondsInput;
-    QListWidget* openedApps;
-    QListWidget* onTimerApps;
+    // Timer management
     std::unordered_map<QString, TimerLogic*> appTimers;
     ScheduleManager schedule;
-    
 
-    //overuse
-    void showUsageData();
-    QListWidget* usageList;
-    //calendar
-    QCalendarWidget* calendar;
-    
+    // Database
     QSqlDatabase& dataBase;
 
-    QDate lastCheckedDate;
-    
+    // Usage
+    void showUsageData();
 
+    // Calendar
+    QDate lastCheckedDate;
     void markScheduledDays(int year, int month);
     void showScheduleForDate(const QDate& date);
-
-   
 };

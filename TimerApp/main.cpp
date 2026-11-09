@@ -6,7 +6,7 @@
 #include "UsageDataAccessObject.h"
 #include "ScheduleDataAccessObject.h"
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[]) {  
     QApplication app(argc, argv);
 
     qDebug() << "Available drivers:" << QSqlDatabase::drivers();

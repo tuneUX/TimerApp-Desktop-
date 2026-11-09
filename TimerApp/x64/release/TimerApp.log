@@ -9,6 +9,7 @@
    RCC: Warning: No resources in 'C:\Users\Facmd.FACM\source\repos\TimerApp\TimerApp\TimerApp.qrc'.
   ScheduleDataAccessObject.cpp
   scheduleManager.cpp
+  UI.cpp
   UsageDataAccessObject.cpp
   ActiveWindowHelper.cpp
   Calendar.cpp

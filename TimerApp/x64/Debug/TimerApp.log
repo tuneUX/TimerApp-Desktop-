@@ -1,6 +1,6 @@
 ﻿   Qt/MSBuild: 3.5.0.0
    Qt: 6.11.1
+  DBConenection.cpp
   TimerApp.cpp
+  TimerLogic.cpp
   main.cpp
-  moc_TimerApp.cpp
-  TimerApp.vcxproj -> C:\Users\Facmd.FACM\source\repos\TimerApp\x64\Debug\TimerApp.exe

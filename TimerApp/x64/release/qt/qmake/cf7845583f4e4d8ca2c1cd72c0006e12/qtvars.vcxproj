@@ -33,7 +33,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|x64&apos;">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\Facmd.FACM\source\repos\TimerApp\TimerApp\x64\release\qt\qmake\9b9bb111abe2456dadd0907be27a95ed;C:\Qt\6.11.1\msvc2022_64\include;C:\Qt\6.11.1\msvc2022_64\include\QtWidgets;C:\Qt\6.11.1\msvc2022_64\include\QtGui;C:\Qt\6.11.1\msvc2022_64\include\QtSql;C:\Qt\6.11.1\msvc2022_64\include\QtCore;C:\Users\Facmd.FACM\source\repos\TimerApp\TimerApp\x64\release\qt\qmake\9b9bb111abe2456dadd0907be27a95ed;/include;C:\Qt\6.11.1\msvc2022_64\mkspecs\win32-msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Facmd.FACM\source\repos\TimerApp\TimerApp\x64\release\qt\qmake\cf7845583f4e4d8ca2c1cd72c0006e12;C:\Qt\6.11.1\msvc2022_64\include;C:\Qt\6.11.1\msvc2022_64\include\QtWidgets;C:\Qt\6.11.1\msvc2022_64\include\QtGui;C:\Qt\6.11.1\msvc2022_64\include\QtSql;C:\Qt\6.11.1\msvc2022_64\include\QtCore;C:\Users\Facmd.FACM\source\repos\TimerApp\TimerApp\x64\release\qt\qmake\cf7845583f4e4d8ca2c1cd72c0006e12;/include;C:\Qt\6.11.1\msvc2022_64\mkspecs\win32-msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -permissive- -Zc:__cplusplus -Zc:externConstexpr -utf-8 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>.\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>

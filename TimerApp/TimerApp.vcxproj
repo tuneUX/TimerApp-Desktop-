@@ -113,6 +113,7 @@
   <ItemGroup>
     <ClCompile Include="ScheduleDataAccessObject.cpp" />
     <ClCompile Include="scheduleManager.cpp" />
+    <ClCompile Include="UI.cpp" />
     <ClCompile Include="UsageDataAccessObject.cpp" />
     <QtRcc Include="TimerApp.qrc" />
     <QtUic Include="TimerApp.ui" />
@@ -138,6 +139,7 @@
     <ClInclude Include="resource1.h" />
     <ClInclude Include="ScheduleDataAccessObject.h" />
     <ClInclude Include="scheduleManager.h" />
+    <ClInclude Include="UI.h" />
     <ClInclude Include="UsageDataAccessObject.h" />
     <QtMoc Include="Calendar.h" />
   </ItemGroup>

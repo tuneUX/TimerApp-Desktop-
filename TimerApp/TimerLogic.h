@@ -27,6 +27,8 @@ signals:
     void remainingChanged(int seconds);
     void finished();
     void paused();
+    void stopped();
+    
 
 private slots:
     void tick();

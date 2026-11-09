@@ -44,6 +44,7 @@ template <> constexpr inline auto TimerLogic::qt_create_metaobjectdata<qt_meta_t
         "seconds",
         "finished",
         "paused",
+        "stopped",
         "tick"
     };
 
@@ -56,8 +57,10 @@ template <> constexpr inline auto TimerLogic::qt_create_metaobjectdata<qt_meta_t
         QtMocHelpers::SignalData<void()>(4, 2, QMC::AccessPublic, QMetaType::Void),
         // Signal 'paused'
         QtMocHelpers::SignalData<void()>(5, 2, QMC::AccessPublic, QMetaType::Void),
+        // Signal 'stopped'
+        QtMocHelpers::SignalData<void()>(6, 2, QMC::AccessPublic, QMetaType::Void),
         // Slot 'tick'
-        QtMocHelpers::SlotData<void()>(6, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(7, 2, QMC::AccessPrivate, QMetaType::Void),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -84,7 +87,8 @@ void TimerLogic::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 0: _t->remainingChanged((*reinterpret_cast<std::add_pointer_t<int>>(_a[1]))); break;
         case 1: _t->finished(); break;
         case 2: _t->paused(); break;
-        case 3: _t->tick(); break;
+        case 3: _t->stopped(); break;
+        case 4: _t->tick(); break;
         default: ;
         }
     }
@@ -94,6 +98,8 @@ void TimerLogic::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         if (QtMocHelpers::indexOfMethod<void (TimerLogic::*)()>(_a, &TimerLogic::finished, 1))
             return;
         if (QtMocHelpers::indexOfMethod<void (TimerLogic::*)()>(_a, &TimerLogic::paused, 2))
+            return;
+        if (QtMocHelpers::indexOfMethod<void (TimerLogic::*)()>(_a, &TimerLogic::stopped, 3))
             return;
     }
 }
@@ -117,14 +123,14 @@ int TimerLogic::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 4)
+        if (_id < 5)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 4;
+        _id -= 5;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 4)
+        if (_id < 5)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 4;
+        _id -= 5;
     }
     return _id;
 }
@@ -145,5 +151,11 @@ void TimerLogic::finished()
 void TimerLogic::paused()
 {
     QMetaObject::activate(this, &staticMetaObject, 2, nullptr);
+}
+
+// SIGNAL 3
+void TimerLogic::stopped()
+{
+    QMetaObject::activate(this, &staticMetaObject, 3, nullptr);
 }
 QT_WARNING_POP
